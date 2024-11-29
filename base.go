@@ -123,7 +123,7 @@ func DeleteTaskByID(id string) error {
 
 // Получили список ближайших задач
 func GetTasks() (map[string]interface{}, error) {
-	result, err := db.Query("SELECT id, date, title, comment, repeat FROM scheduler")
+	result, err := db.Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY date")
 	if err != nil {
 		log.Panic(err)
 		return nil, err
