@@ -36,6 +36,7 @@ func initDB() (*sql.DB, error) {
 		);`
 		_, err = db.Exec(createTableQuery)
 		if err != nil {
+			log.Panic(err)
 			return nil, err
 		}
 		log.Println("Таблица scheduler создана успешно.")
@@ -46,7 +47,7 @@ func initDB() (*sql.DB, error) {
 }
 
 // Добавили таску в БД
-func AddTask(t Task) int64 {
+func AddTask(t Task) (int64, error) {
 
 	result, err := db.Exec("INSERT INTO scheduler ( date, title, comment, repeat ) VALUES (:date, :title, :comment, :repeat)",
 		sql.Named("date", t.Date),
@@ -54,13 +55,13 @@ func AddTask(t Task) int64 {
 		sql.Named("comment", t.Comment),
 		sql.Named("repeat", t.Repeat))
 	if err != nil {
-		log.Panic(err)
+		return 0, err
 	}
 	id, err := result.LastInsertId()
 	if err != nil {
-		log.Panic(err)
+		return 0, err
 	}
-	return id
+	return id, nil
 }
 
 // Получили таску по ID
@@ -122,13 +123,13 @@ func DeleteTaskByID(id string) error {
 }
 
 // Получили список ближайших задач
-func GetTasks() (map[string]interface{}, error) {
+func GetTasks() ([]Task, error) {
 	result, err := db.Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY date")
 	if err != nil {
 		log.Panic(err)
 		return nil, err
 	}
-	tasks := []Task{}
+	var tasks []Task
 
 	for result.Next() {
 		var tasklist Task
@@ -140,6 +141,6 @@ func GetTasks() (map[string]interface{}, error) {
 		tasks = append(tasks, tasklist)
 
 	}
-	out := map[string]interface{}{"tasks": tasks}
-	return out, nil
+
+	return tasks, nil
 }

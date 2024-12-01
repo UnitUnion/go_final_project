@@ -7,7 +7,6 @@ import (
 	_ "modernc.org/sqlite"
 	"net/http"
 	"os"
-	"time"
 )
 
 const DateFormat = "20060102"
@@ -21,10 +20,9 @@ type Task struct {
 }
 
 var db *sql.DB
-var err error
-var Now = time.Now()
 
 func main() {
+	var err error
 	db, err = initDB()
 	if err != nil {
 		log.Panic(err)
@@ -43,9 +41,9 @@ func main() {
 	http.HandleFunc("/api/task/done", TaskDoneHandler)
 	http.HandleFunc("/api/nextdate", NextDateHandler)
 
-	err := http.ListenAndServe(addr, nil)
+	err = http.ListenAndServe(addr, nil)
 	if err != nil {
-		fmt.Printf("Ошибка при запуске сервера: %s", err.Error())
+		fmt.Printf("Ошибка при запуске сервера: %v", err)
 		return
 	}
 
