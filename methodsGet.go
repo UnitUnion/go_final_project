@@ -68,10 +68,7 @@ func NextDateMethodGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	out, err := json.Marshal(result)
-	if err != nil {
-		fmt.Println(err.Error(), 500)
-	}
+	out := []byte(result)
 
 	sendResponse(w, out)
 

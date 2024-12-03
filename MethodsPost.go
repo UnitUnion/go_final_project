@@ -94,11 +94,7 @@ func TaskDoneMethodPost(w http.ResponseWriter, r *http.Request) {
 			sendError(w, err.Error(), 400)
 			return
 		}
-		out, err := json.Marshal("{}")
-		if err != nil {
-			sendError(w, "Ошибка json", 500)
-			return
-		}
+		out := []byte("{}")
 		sendResponse(w, out)
 	default:
 		err := DeleteTaskByID(id)
@@ -106,11 +102,7 @@ func TaskDoneMethodPost(w http.ResponseWriter, r *http.Request) {
 			sendError(w, err.Error(), 500)
 			return
 		}
-		out, err := json.Marshal("{}")
-		if err != nil {
-			sendError(w, "Ошибка json", 500)
-			return
-		}
+		out := []byte("{}")
 		sendResponse(w, out)
 
 	}

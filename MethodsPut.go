@@ -71,10 +71,6 @@ func TaskMethodPut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	out, err := json.Marshal("")
-	if err != nil {
-		sendError(w, "Ошибка json", 500)
-		return
-	}
+	out := []byte("{}")
 	sendResponse(w, out)
 }

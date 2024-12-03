@@ -124,19 +124,19 @@ func DeleteTaskByID(id string) error {
 
 // Получили список ближайших задач
 func GetTasks() ([]Task, error) {
+	var tasks []Task
 	result, err := db.Query("SELECT id, date, title, comment, repeat FROM scheduler ORDER BY date")
 	if err != nil {
-		log.Panic(err)
-		return nil, err
+		err := errors.New("Ошибка базы данных")
+		return tasks, err
 	}
-	var tasks []Task
 
 	for result.Next() {
 		var tasklist Task
 		err := result.Scan(&tasklist.ID, &tasklist.Date, &tasklist.Title, &tasklist.Comment, &tasklist.Repeat)
 		if err != nil {
-			log.Fatal(err)
-			return nil, err
+			err := errors.New("Задачи не найдены")
+			return tasks, err
 		}
 		tasks = append(tasks, tasklist)
 
