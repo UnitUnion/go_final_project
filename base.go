@@ -37,7 +37,6 @@ func initDB() (*sql.DB, error) {
 		_, err = db.Exec(createTableQuery)
 		if err != nil {
 			log.Panic(err)
-			return nil, err
 		}
 		log.Println("Таблица scheduler создана успешно.")
 	}
